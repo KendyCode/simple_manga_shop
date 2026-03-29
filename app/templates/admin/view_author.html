@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <h2>Détails de l'Auteur : {{ author.name }}</h2>
+    <hr>
+    <p><strong>ID :</strong> {{ author.id }}</p>
+    <p><strong>Biographie :</strong></p>
+    <p style="white-space: pre-wrap;">{{ author.bio or "Aucune biographie disponible." }}</p>
+    <br>
+    <a href="{{ url_for('admin_dashboard') }}" class="btn">Retour au tableau de bord</a>
+    <a href="{{ url_for('admin_edit_author', author_id=author.id) }}" class="btn">Modifier</a>
+    <form action="{{ url_for('admin_delete_author', author_id=author.id) }}" method="POST" style="display:inline;">
+        <button type="submit" class="btn btn-danger" onclick="return confirm('Sûr de vouloir supprimer ?')">Supprimer</button>
+    </form>
+</div>
+{% endblock %}

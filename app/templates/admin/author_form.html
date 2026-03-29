@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card" style="max-width: 600px; margin: auto;">
+    <h2>{{ title }}</h2>
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        
+        <div style="margin-bottom: 15px;">
+            {{ form.name.label }}<br>
+            {{ form.name(style="width: 100%; padding: 8px;") }}
+        </div>
+        
+        <div style="margin-bottom: 15px;">
+            {{ form.bio.label }}<br>
+            {{ form.bio(style="width: 100%; padding: 8px; height: 100px;") }}
+        </div>
+        
+        <div>
+            {{ form.submit(class="btn btn-success") }}
+            <a href="{{ url_for('admin_dashboard') }}" class="btn">Annuler</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

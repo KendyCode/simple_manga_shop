@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card" style="max-width: 400px; margin: auto;">
+    <h2>Se connecter</h2>
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        
+        <div style="margin-bottom: 15px;">
+            {{ form.email.label }}<br>
+            {{ form.email(style="width: 100%; padding: 8px;") }}
+        </div>
+        
+        <div style="margin-bottom: 15px;">
+            {{ form.password.label }}<br>
+            {{ form.password(style="width: 100%; padding: 8px;", type="password") }}
+        </div>
+        
+        <div style="margin-bottom: 15px;">
+            {{ form.remember() }} {{ form.remember.label }}
+        </div>
+        
+        <div>
+            {{ form.submit(class="btn") }}
+        </div>
+    </form>
+</div>
+{% endblock %}

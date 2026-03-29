@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <h2>{{ manga.title }}</h2>
+    <div style="display: flex; gap: 20px;">
+        {% if manga.cover_url %}
+        <img src="{{ manga.cover_url }}" alt="Couverture" style="max-width: 200px; border-radius: 5px;">
+        {% endif %}
+        <div>
+            <p><strong>ID :</strong> {{ manga.id }}</p>
+            <p><strong>Auteur :</strong> {{ manga.author.name if manga.author else 'Inconnu NNN' }}</p>
+            <p><strong>Prix :</strong> {{ "%.2f"|format(manga.price) }} €</p>
+            <p><strong>Stock :</strong> {{ manga.stock }} unités</p>
+            <p><strong>Description :</strong></p>
+            <p>{{ manga.description }}</p>
+        </div>
+    </div>
+    <br>
+    <a href="{{ url_for('admin_dashboard') }}" class="btn">Retour</a>
+    <a href="{{ url_for('admin_edit_manga', manga_id=manga.id) }}" class="btn">Modifier</a>
+    <form action="{{ url_for('admin_delete_manga', manga_id=manga.id) }}" method="POST" style="display:inline;">
+        <button type="submit" class="btn btn-danger" onclick="return confirm('Sûr de vouloir supprimer ?')">Supprimer</button>
+    </form>
+</div>
+{% endblock %}

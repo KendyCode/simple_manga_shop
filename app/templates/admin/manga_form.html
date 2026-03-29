@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card" style="max-width: 600px; margin: auto;">
+    <h2>{{ title }}</h2>
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        
+        <div style="margin-bottom: 15px;">
+            {{ form.title.label }}<br>
+            {{ form.title(style="width: 100%; padding: 8px;") }}
+        </div>
+        
+        <div style="margin-bottom: 15px;">
+            {{ form.description.label }}<br>
+            {{ form.description(style="width: 100%; padding: 8px; height: 100px;") }}
+        </div>
+        
+        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+            <div style="flex: 1;">
+                {{ form.price.label }}<br>
+                {{ form.price(style="width: 100%; padding: 8px;") }}
+            </div>
+            <div style="flex: 1;">
+                {{ form.stock.label }}<br>
+                {{ form.stock(style="width: 100%; padding: 8px;") }}
+            </div>
+        </div>
+        
+        <div style="margin-bottom: 15px;">
+            {{ form.author_id.label }}<br>
+            {{ form.author_id(style="width: 100%; padding: 8px;") }}
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            {{ form.cover_url.label }}<br>
+            {{ form.cover_url(style="width: 100%; padding: 8px;") }}
+        </div>
+        
+        <div>
+            {{ form.submit(class="btn btn-success") }}
+            <a href="{{ url_for('admin_dashboard') }}" class="btn">Annuler</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
