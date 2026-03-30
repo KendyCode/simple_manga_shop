@@ -118,11 +118,7 @@ flask run
 
 ## 👑 9. Passer un utilisateur en administrateur
 
-Après avoir créé un compte via l'interface web, lancer plus.py:
-
-```bash
-python3
-```
+Après avoir créé un compte via l'interface web, partir dans plus.py:
 
 Puis exécute :
 
