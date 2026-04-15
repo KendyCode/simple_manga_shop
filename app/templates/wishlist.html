@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Ma Liste de Souhaits</h2>
+<div style="display: flex; flex-wrap: wrap; gap: 20px;">
+    {% for item in items %}
+    <div class="card" style="width: 250px; text-align: center;">
+        {% if item.manga.cover_url %}
+        <img src="{{ item.manga.cover_url }}" alt="{{ item.manga.title }}" style="max-width: 100%; height: auto;">
+        {% endif %}
+        <h3>{{ item.manga.title }}</h3>
+        <p>Prix : {{ "%.2f"|format(item.manga.price) }} €</p>
+        <br><br>
+        <a href="{{ url_for('remove_from_wishlist', item_id=item.id) }}" class="btn btn-danger">Retirer</a>
+    </div>
+    {% else %}
+    <p>Votre liste de souhaits est vide.</p>
+    {% endfor %}
+</div>
+{% endblock %}

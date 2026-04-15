@@ -167,3 +167,36 @@ def admin_delete_manga(manga_id):
     db.session.commit()
     flash('Manga supprimé.', 'info')
     return redirect(url_for('admin_dashboard'))
+
+
+# WISHLIST
+
+@app.route("/wishlist")
+@login_required
+def wishlist():
+    items = current_user.wishlist
+    return render_template('wishlist.html', items=items)
+
+@app.route("/wishlist/add/<int:manga_id>")
+@login_required
+def add_to_wishlist(manga_id):
+    manga = Manga.query.get_or_404(manga_id)
+    item = WishlistItem.query.filter_by(user_id=current_user.id, manga_id=manga.id).first()
+    if not item:
+        new_item = WishlistItem(user_id=current_user.id, manga_id=manga.id)
+        db.session.add(new_item)
+        db.session.commit()
+        flash(f'{manga.title} ajouté à votre liste de souhaits!', 'success')
+    else:
+        flash('Ce manga est déjà dans votre liste de souhaits.', 'info')
+    return redirect(request.referrer or url_for('index'))
+
+@app.route("/wishlist/remove/<int:item_id>")
+@login_required
+def remove_from_wishlist(item_id):
+    item = WishlistItem.query.get_or_404(item_id)
+    if item.user_id == current_user.id:
+        db.session.delete(item)
+        db.session.commit()
+        flash('Manga retiré de la liste de souhaits.', 'info')
+    return redirect(url_for('wishlist'))
