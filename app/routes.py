@@ -113,8 +113,7 @@ def admin_delete_author(author_id):
 @login_required
 @admin_required
 def admin_add_manga():
-    form = MangaForm()
-    form.author_id.choices = [(a.id, a.name) for a in Author.query.all()]
+    form = MangaForm() # Les choix se chargent tout seuls ici !
     if form.validate_on_submit():
         manga = Manga(
             title=form.title.data,
@@ -122,7 +121,7 @@ def admin_add_manga():
             price=form.price.data,
             stock=form.stock.data,
             cover_url=form.cover_url.data,
-            author_id=form.author_id.data
+            author=form.author.data # On passe directement l'objet auteur (ou None)
         )
         db.session.add(manga)
         db.session.commit()
@@ -144,31 +143,18 @@ def admin_edit_manga(manga_id):
     manga = Manga.query.get_or_404(manga_id)
     form = MangaForm(obj=manga)
 
-    # On crée la liste des auteurs, mais on ajoute une option vide au début
-    # (0, "--- Aucun auteur ---") sert de valeur par défaut
-    authors = Author.query.all()
-    form.author_id.choices = [(0, "--- Aucun auteur ---")] + [(a.id, a.name) for a in authors]
-
     if form.validate_on_submit():
-        # Si l'utilisateur a choisi "Aucun" (ID 0), on remet à None en BDD
-        author_id_value = form.author_id.data
-        if author_id_value == 0:
-            author_id_value = None
-
+        # Mise à jour simplifiée
         manga.title = form.title.data
         manga.description = form.description.data
         manga.price = form.price.data
         manga.stock = form.stock.data
         manga.cover_url = form.cover_url.data
-        manga.author_id = author_id_value
+        manga.author = form.author.data # Si "Aucun" est choisi, form.author.data sera None
 
         db.session.commit()
         flash('Manga mis à jour.', 'success')
         return redirect(url_for('admin_dashboard'))
-
-    # Si le manga n'a pas d'auteur, on sélectionne l'option 0 dans le formulaire
-    if request.method == 'GET' and not manga.author_id:
-        form.author_id.data = 0
 
     return render_template('admin/manga_form.html', form=form, title='Modifier le Manga')
 
