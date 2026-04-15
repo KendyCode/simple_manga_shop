@@ -1,7 +1,7 @@
 from functools import wraps
 from flask import render_template, url_for, flash, redirect, request, abort
 from app import app, db
-from app.forms import RegistrationForm, LoginForm, MangaForm, AuthorForm
+from app.forms import RegistrationForm, LoginForm, MangaForm, AuthorForm, SearchForm
 from app.models import User, Manga, Author, WishlistItem, CartItem
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -115,6 +115,7 @@ def admin_delete_author(author_id):
 def admin_add_manga():
     form = MangaForm()
     form.author_id.choices = [(a.id, a.name) for a in Author.query.all()]
+    print(form.author_id.choices)  # Debug: Affiche les choix d'auteurs dans la console
     if form.validate_on_submit():
         manga = Manga(
             title=form.title.data,
@@ -181,3 +182,25 @@ def admin_delete_manga(manga_id):
     db.session.commit()
     flash('Manga supprimé.', 'info')
     return redirect(url_for('admin_dashboard'))
+
+
+
+# Pour une recherche simple
+@app.route("/search")
+def search():
+    # On initialise le formulaire avec les arguments de l'URL
+    form = SearchForm(request.args)
+    results = []
+    query_text = ""
+
+    # Pour un formulaire GET, on vérifie si search_query est dans request.args
+    # ET on utilise validate() qui fonctionnera car c'est une requête GET
+    if request.args.get('search_query') and form.validate():
+        query_text = form.search_query.data
+        results = Manga.query.filter(Manga.title.icontains(query_text)).all()
+    
+    return render_template('search_results.html', 
+                           title='Résultats de recherche', 
+                           form=form, 
+                           mangas=results, 
+                           query=query_text)

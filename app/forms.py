@@ -39,3 +39,11 @@ class MangaForm(FlaskForm):
     cover_url = StringField('URL de la pochette/couverture')
     author_id = SelectField('Auteur', coerce=int, validators=[Optional()])
     submit = SubmitField('Enregistrer le Manga')
+
+# Pour une recherche simple 
+class SearchForm(FlaskForm):
+    class Meta:
+        csrf = False  # Désactive la protection CSRF pour permettre le GET
+
+    search_query = StringField('Rechercher un manga', validators=[DataRequired()])
+    submit = SubmitField('Rechercher')
