@@ -11,7 +11,7 @@
         <h3>{{ manga.title }}</h3>
         <p>Prix : {{ "%.2f"|format(manga.price) }} €</p>
         <p>Stock : {{ manga.stock }}</p>
-        <a class="btn">Voir détails</a>
+        <a href="{{ url_for('manga_details', manga_id=manga.id) }}" class="btn">Voir détails</a>
         {% if current_user.is_authenticated %}
             <br><br>
             <a class="btn btn-success">Panier</a>

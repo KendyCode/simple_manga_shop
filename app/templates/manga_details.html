@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card" style="display: flex; gap: 20px;">
+    {% if manga.cover_url %}
+    <div style="flex: 0 0 300px;">
+        <img src="{{ manga.cover_url }}" alt="{{ manga.title }}" style="width: 100%; border-radius: 5px;">
+    </div>
+    {% endif %}
+    <div style="flex: 1;">
+        <h2>{{ manga.title }}</h2>
+        <h4>Auteur : {{ manga.author.name if manga.author else 'Inconnu' }}</h4>
+        <p style="font-size: 1.2em; color: #28a745;"><strong>Prix : {{ "%.2f"|format(manga.price) }} €</strong></p>
+        <p><strong>Stock :</strong> {{ manga.stock }}</p>
+        <hr>
+        <p>{{ manga.description }}</p>
+        
+        <br>
+
+    </div>
+</div>
+{% endblock %}

@@ -167,3 +167,9 @@ def admin_delete_manga(manga_id):
     db.session.commit()
     flash('Manga supprimé.', 'info')
     return redirect(url_for('admin_dashboard'))
+
+# VOir les détails d'un manga
+@app.route("/manga/<int:manga_id>")
+def manga_details(manga_id):
+    manga = Manga.query.get_or_404(manga_id)
+    return render_template('manga_details.html', manga=manga)
