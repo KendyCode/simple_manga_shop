@@ -167,3 +167,36 @@ def admin_delete_manga(manga_id):
     db.session.commit()
     flash('Manga supprimé.', 'info')
     return redirect(url_for('admin_dashboard'))
+
+# Panier
+
+@app.route("/cart")
+@login_required
+def cart():
+    items = current_user.cart_items
+    total = sum(item.manga.price * item.quantity for item in items)
+    return render_template('cart.html', items=items, total=total)
+
+@app.route("/cart/add/<int:manga_id>")
+@login_required
+def add_to_cart(manga_id):
+    manga = Manga.query.get_or_404(manga_id)
+    cart_item = CartItem.query.filter_by(user_id=current_user.id, manga_id=manga.id).first()
+    if cart_item:
+        cart_item.quantity += 1
+    else:
+        cart_item = CartItem(user_id=current_user.id, manga_id=manga.id)
+        db.session.add(cart_item)
+    db.session.commit()
+    flash(f'{manga.title} a été ajouté à votre panier!', 'success')
+    return redirect(request.referrer or url_for('index'))
+
+@app.route("/cart/remove/<int:item_id>")
+@login_required
+def remove_from_cart(item_id):
+    cart_item = CartItem.query.get_or_404(item_id)
+    if cart_item.user_id == current_user.id:
+        db.session.delete(cart_item)
+        db.session.commit()
+        flash('Article supprimé du panier.', 'info')
+    return redirect(url_for('cart'))

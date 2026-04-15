@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Mon Panier</h2>
+{% if items %}
+    <table style="width: 100%; border-collapse: collapse; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+        <tr style="background: #333; color: white;">
+            <th style="padding: 10px; text-align: left;">Manga</th>
+            <th style="padding: 10px; text-align: center;">Prix Unitaire</th>
+            <th style="padding: 10px; text-align: center;">Quantité</th>
+            <th style="padding: 10px; text-align: center;">Total</th>
+            <th style="padding: 10px; text-align: center;">Action</th>
+        </tr>
+        {% for item in items %}
+        <tr style="border-bottom: 1px solid #ddd;">
+            <td style="padding: 10px;">{{ item.manga.title }}</td>
+            <td style="padding: 10px; text-align: center;">{{ "%.2f"|format(item.manga.price) }} €</td>
+            <td style="padding: 10px; text-align: center;">{{ item.quantity }}</td>
+            <td style="padding: 10px; text-align: center;">{{ "%.2f"|format(item.manga.price * item.quantity) }} €</td>
+            <td style="padding: 10px; text-align: center;">
+                <a href="{{ url_for('remove_from_cart', item_id=item.id) }}" class="btn btn-danger" style="padding: 5px 10px;">Retirer</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <h3 style="text-align: right; margin-top: 20px;">Total du Panier : {{ "%.2f"|format(total) }} €</h3>
+    <div style="text-align: right;">
+        <button class="btn btn-success" style="font-size: 1.2em;">Procéder au paiement (Demo)</button>
+    </div>
+{% else %}
+    <div class="card">
+        <p>Votre panier est vide.</p>
+        <a href="{{ url_for('index') }}" class="btn">Retourner au catalogue</a>
+    </div>
+{% endif %}
+{% endblock %}

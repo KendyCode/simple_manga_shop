@@ -25,7 +25,7 @@
         <nav>
             <a href="{{ url_for('index') }}">Accueil</a>
             {% if current_user.is_authenticated %}
-                <a>Panier</a>
+                <a href="{{ url_for('cart') }}">Panier</a>
                 <a>Wishlist</a>
                 {% if current_user.is_admin %}
                     <a href="{{ url_for('admin_dashboard') }}">Admin</a>

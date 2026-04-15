@@ -13,9 +13,9 @@
         <p>Stock : {{ manga.stock }}</p>
         <a class="btn">Voir détails</a>
         {% if current_user.is_authenticated %}
-            <br><br>
-            <a class="btn btn-success">Panier</a>
-            <a class="btn">Wishlist</a>
+        <br><br>
+        <a href="{{ url_for('add_to_cart', manga_id=manga.id) }}" class="btn btn-success">Panier</a>
+        <a class="btn">Wishlist</a>
         {% endif %}
     </div>
     {% else %}
