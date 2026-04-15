@@ -54,5 +54,12 @@ class SearchForm(FlaskForm):
     class Meta:
         csrf = False  # Désactive la protection CSRF pour permettre le GET
 
-    search_query = StringField('Rechercher un manga', validators=[DataRequired()])
+    search_query = StringField('Titre', validators=[Optional()]) # Mis en Optional pour pouvoir chercher par auteur uniquement
+    author = QuerySelectField(
+        'Filtrer par auteur',
+        query_factory=lambda: Author.query.all(),
+        allow_blank=True,
+        blank_text='--- Tous les auteurs ---',
+        get_label='name'
+    )
     submit = SubmitField('Rechercher')

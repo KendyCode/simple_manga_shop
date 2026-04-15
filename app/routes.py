@@ -175,17 +175,22 @@ def admin_delete_manga(manga_id):
 def search():
     # On initialise le formulaire avec les arguments de l'URL
     form = SearchForm(request.args)
-    results = []
-    query_text = ""
+    # 1. On commence par une requête de base qui sélectionne tous les mangas
+    query_db = Manga.query
 
-    # Pour un formulaire GET, on vérifie si search_query est dans request.args
-    # ET on utilise validate() qui fonctionnera car c'est une requête GET
-    if request.args.get('search_query') and form.validate():
-        query_text = form.search_query.data
-        results = Manga.query.filter(Manga.title.icontains(query_text)).all()
+    # 2. Si le titre est rempli, on filtre par titre
+    if form.search_query.data:
+        query_db = query_db.filter(Manga.title.icontains(form.search_query.data))
+    
+    # 3. Si un auteur est sélectionné, on filtre par l'ID de cet auteur
+    if form.author.data:
+        query_db = query_db.filter(Manga.author_id == form.author.data.id)
+    
+    # 4. On exécute la requête finale
+    results = query_db.all()
     
     return render_template('search_results.html', 
                            title='Résultats de recherche', 
                            form=form, 
                            mangas=results, 
-                           query=query_text)
+                           query=form.search_query.data)

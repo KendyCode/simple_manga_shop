@@ -1,50 +1,39 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Résultats pour : "{{ query }}"</h2>
+<h2>Résultats de recherche</h2>
 
-<div style="margin-bottom: 30px;">
-    <form action="{{ url_for('search') }}" method="GET">
-        {{ form.search_query(placeholder="Rechercher un manga...", style="padding: 8px; width: 300px;") }}
-        {{ form.submit(class="btn") }}
+<div style="margin-bottom: 30px; background: #f8f9fa; padding: 20px; border-radius: 8px;">
+    <form action="{{ url_for('search') }}" method="GET" style="display: flex; gap: 15px; align-items: flex-end;">
+        <div>
+            <label>{{ form.search_query.label }}</label><br>
+            {{ form.search_query(placeholder="Nom du manga...", style="padding: 8px;") }}
+        </div>
         
-        {% if form.search_query.errors %}
-            {% for error in form.search_query.errors %}
-                <p style="color: red; font-size: 0.8em;">{{ error }}</p>
-            {% endfor %}
-        {% endif %}
+        <div>
+            <label>{{ form.author.label }}</label><br>
+            {{ form.author(style="padding: 8px;") }}
+        </div>
+        
+        <div>
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
     </form>
 </div>
 
 <div style="display: flex; flex-wrap: wrap; gap: 20px;">
     {% for manga in mangas %}
-    <div class="card" style="width: 250px; text-align: center; border: 1px solid #ddd; padding: 10px; border-radius: 8px;">
-        {% if manga.cover_url %}
-        <img src="{{ manga.cover_url }}" alt="{{ manga.title }}" style="max-width: 100%; height: auto; border-radius: 4px;">
-        {% endif %}
-        
-        <h3>{{ manga.title }}</h3>
-        <p>Prix : {{ "%.2f"|format(manga.price) }} €</p>
-        <p>Stock : {{ manga.stock }}</p>
-        
-        <a class="btn btn-info">Voir détails</a>
-        
-        {% if current_user.is_authenticated %}
-            <div style="margin-top: 10px;">
-                <a class="btn btn-success">Panier</a>
-                <a class="btn btn-secondary">Wishlist</a>
-            </div>
-        {% endif %}
-    </div>
+        <div class="card" style="width: 250px; text-align: center; border: 1px solid #ddd; padding: 10px; border-radius: 8px;">
+            {% if manga.cover_url %}
+                <img src="{{ manga.cover_url }}" alt="{{ manga.title }}" style="max-width: 100%; height: auto;">
+            {% endif %}
+            <h3>{{ manga.title }}</h3>
+            <p><strong>Auteur :</strong> {{ manga.author.name if manga.author else 'Anonyme' }}</p>
+            <p>Prix : {{ "%.2f"|format(manga.price) }} €</p>
+            <a class="btn btn-info">Voir détails</a>
+        </div>
     {% else %}
-    <div style="width: 100%;">
-        {% if query %}
-            <p>Désolé, aucun manga ne correspond à "{{ query }}".</p>
-        {% else %}
-            <p>Veuillez entrer un mot-clé pour lancer une recherche.</p>
-        {% endif %}
-        <a href="{{ url_for('index') }}">Retour au catalogue complet</a>
-    </div>
+        <p>Aucun manga ne correspond à ces critères.</p>
     {% endfor %}
 </div>
 {% endblock %}
